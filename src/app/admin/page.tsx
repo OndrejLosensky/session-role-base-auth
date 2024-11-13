@@ -2,8 +2,10 @@ import { getUser } from "@/app/utils/getUser";
 import { UserMenu } from "../components/UserMenu";
 import { UsersList } from "@/app/components/UsersList";
 import { prisma } from "@/lib/prisma";
-import { Role } from "../utils/types";
+import { Permission } from "../utils/types";
+import { hasPermission } from "@/lib/permissions";
 import { ProfileAvatar } from "../components/ProfileAvatar";
+import { RolesList } from "@/app/components/RolesList";
 
 async function getAllUsers() {
   const users = await prisma.user.findMany({
@@ -11,7 +13,17 @@ async function getAllUsers() {
       id: true,
       email: true,
       name: true,
-      role: true,
+      role: {
+        select: {
+          id: true,
+          name: true,
+          permissions: {
+            select: {
+              name: true
+            }
+          }
+        }
+      },
       profilePicture: true,
       profileColor: true,
       createdAt: true,
@@ -24,17 +36,28 @@ async function getAllUsers() {
   return users;
 }
 
+async function getAllRoles() {
+  return prisma.role.findMany({
+    include: {
+      permissions: true
+    }
+  });
+}
+
 export default async function Admin() {
   const user = await getUser();
-  const isAdmin = user.role === Role.ADMIN;
-  const allUsers = isAdmin ? await getAllUsers() : [];
+  const canViewUsers = await hasPermission(user.id, Permission.READ_USER);
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  const canCreateUser = await hasPermission(user.id, Permission.CREATE_USER);
+  const allUsers = canViewUsers ? await getAllUsers() : [];
+  const roles = canViewUsers ? await getAllRoles() : [];
 
   return (
     <div>
       <nav className="bg-white shadow-md px-8 py-1 w-screen">
         <div className="flex items-center justify-between flex-row">
           <h1 className="text-xl font-bold">Dashboard</h1>         
-          <UserMenu user={user} />
+          <UserMenu user={{...user, role: user.role.name}} />
         </div>
       </nav>
 
@@ -72,7 +95,7 @@ export default async function Admin() {
 
               <div>
                 <label className="text-gray-600 text-sm">Role</label>
-                <p className="capitalize">{user.role.toLowerCase()}</p>
+                <p className="capitalize">{user.role.name.toLowerCase()}</p>
               </div>
 
               <div>
@@ -88,9 +111,20 @@ export default async function Admin() {
           </div>
         </div>
 
-        {/* Users List - Only shown to admins */}
-        {isAdmin && allUsers.length > 0 && (
-          <UsersList users={allUsers} />
+        {canViewUsers && (
+          <>           
+            {allUsers.length > 0 && (
+              <>
+                <UsersList 
+                  users={allUsers} 
+                  roles={roles}
+                  currentUserId={user.id}
+                  canCreateUser={canCreateUser}
+                />
+                <RolesList roles={roles} canManageRoles={canManageRoles} />
+              </>
+            )}
+          </>
         )}
       </div>
     </div>

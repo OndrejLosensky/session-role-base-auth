@@ -18,12 +18,14 @@ model User {
   email          String    @unique
   password       String
   name           String?
-  role           String    @default("USER")
+  role           Role      @relation(fields: [roleId], references: [id])
+  roleId         String    @default("user")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   profilePicture String?
   profileColor   String?   
 }
+
 model AuditLog {
   id        String   @id @default(cuid())
   action    String
@@ -32,5 +34,22 @@ model AuditLog {
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  roles       Role[]
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String?
+  users       User[]
+  permissions Permission[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 

@@ -33,9 +33,16 @@ export async function login(prevState: LoginState | undefined, formData: FormDat
 
   const { email, password } = result.data;
 
-  // Find user in database
+  // Find user in database with role
   const user = await prisma.user.findUnique({
     where: { email },
+    include: {
+      role: {
+        include: {
+          permissions: true
+        }
+      }
+    }
   });
 
   // Check if user exists and password matches
@@ -49,9 +56,24 @@ export async function login(prevState: LoginState | undefined, formData: FormDat
     };
   }
 
+  // Ensure user has at least USER role
+  if (!user.roleId) {
+    const userRole = await prisma.role.findUnique({
+      where: { name: 'USER' }
+    });
+    
+    if (!userRole) {
+      throw new Error('Default USER role not found');
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { roleId: userRole.id }
+    });
+  }
+
   await createSession(user.id);
   
-  // Create audit log for successful login
   await createAuditLog({
     action: 'LOGIN',
     userId: user.id,

@@ -1,84 +1,99 @@
 /*
-const { PrismaClient } = require('@prisma/client')
-const { hash } = require('bcryptjs')
+import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcryptjs';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-function generateGradient(): string {
-    const generateHexColor = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-    const color1 = generateHexColor();
-    const color2 = generateHexColor();
-    return `linear-gradient(135deg, ${color1}, ${color2})`;
-  }
+// Define permissions enum directly in the seed file
+const Permission = {
+  // User Management
+  CREATE_USER: 'create_user',
+  READ_USER: 'read_user',
+  UPDATE_USER: 'update_user',
+  DELETE_USER: 'delete_user',
   
-  async function main() {
-    // Array of users to seed
-    const users = [
-      {
-        email: 'admin@example.com',
-        name: 'Admin User',
-        password: 'admin123',
-        role: 'ADMIN'
-      },
-      {
-        email: 'manager@example.com',
-        name: 'Manager User',
-        password: 'manager123',
-        role: 'MANAGER'
-      },
-      {
-        email: 'user@example.com',
-        name: 'Regular User',
-        password: 'user123',
-        role: 'USER'
+  // Role Management
+  MANAGE_ROLES: 'manage_roles',
+  
+  // Content Management
+  CREATE_CONTENT: 'create_content',
+  READ_CONTENT: 'read_content',
+  UPDATE_CONTENT: 'update_content',
+  DELETE_CONTENT: 'delete_content',
+  
+  // System Management
+  VIEW_AUDIT_LOGS: 'view_audit_logs',
+  MANAGE_SETTINGS: 'manage_settings'
+} as const;
+
+async function main() {
+  // Create basic permissions
+  const permissions = Object.values(Permission);
+  await Promise.all(
+    permissions.map(permission =>
+      prisma.permission.upsert({
+        where: { name: permission },
+        update: {},
+        create: {
+          name: permission,
+          description: `Permission to ${permission.toLowerCase().replace('_', ' ')}`
+        }
+      })
+    )
+  );
+
+  // Create default USER role with fixed ID
+  await prisma.role.upsert({
+    where: { id: 'user' },
+    update: {},
+    create: {
+      id: 'user', 
+      name: 'USER',
+      description: 'Basic user access',
+      permissions: {
+        connect: [
+          { name: Permission.READ_CONTENT },
+        ]
       }
-    ];
-  
-    console.log('Starting seed...');
-  
-    // Create users
-    for (const userData of users) {
-      const existingUser = await prisma.user.findUnique({
-        where: { email: userData.email }
-      });
-  
-      if (!existingUser) {
-        const hashedPassword = await hash(userData.password, 10);
-        
-        const user = await prisma.user.create({
-          data: {
-            email: userData.email,
-            name: userData.name,
-            password: hashedPassword,
-            role: userData.role,
-            profileColor: generateGradient()
-          }
-        });
-  
-        console.log(`Created user: ${user.email} (${user.role})`);
-      } else {
-        // Update existing user with profile color if they don't have one
-        if (!existingUser.profileColor) {
-          await prisma.user.update({
-            where: { id: existingUser.id },
-            data: { profileColor: generateGradient() }
-          });
-          console.log(`Updated existing user: ${existingUser.email} with profile color`);
-        } else {
-          console.log(`User already exists: ${existingUser.email}`);
+    }
+  });
+
+  // Create ADMIN role
+  const adminRole = await prisma.role.upsert({
+    where: { name: 'ADMIN' },
+    update: {},
+    create: {
+      name: 'ADMIN',
+      description: 'Full system access',
+      permissions: {
+        connect: permissions.map(permission => ({ name: permission }))
+      }
+    }
+  });
+
+  // Create default admin user
+  await prisma.user.upsert({
+    where: { email: 'admin@example.com' },
+    update: {},
+    create: {
+      email: 'admin@example.com',
+      password: await hash('admin123', 10),
+      name: 'Admin User',
+      role: {
+        connect: {
+          name: 'ADMIN'
         }
       }
     }
-  
-    console.log('Seed completed successfully!');
-  }
-  
-  main()
-    .catch((e) => {
-      console.error('Error during seed:', e);
-      process.exit(1);
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
-    });
+  });
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
 */
