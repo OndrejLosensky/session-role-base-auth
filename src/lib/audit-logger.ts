@@ -2,20 +2,41 @@ import { prisma } from "@/lib/prisma"
 import { headers } from "next/headers"
 
 export type AuditLogAction = 
+  // Authentication
   | 'LOGIN'
   | 'REGISTER'
   | 'LOGOUT'
-  | 'CREATE_ROLE'
-  | 'UPDATE_ROLE'
-  | 'DELETE_ROLE'
+  | 'PASSWORD_RESET'
+  | 'PASSWORD_CHANGE'
+  
+  // User Management
   | 'CREATE_USER'
   | 'UPDATE_USER'
   | 'DELETE_USER'
+  | 'UPDATE_PROFILE'
+  
+  // Role Management
+  | 'CREATE_ROLE'
+  | 'UPDATE_ROLE'
+  | 'DELETE_ROLE'
+  | 'ASSIGN_ROLE'
+  
+  // Permission Management
+  | 'GRANT_PERMISSION'
+  | 'REVOKE_PERMISSION'
+  | 'CREATE_PERMISSION'
+  
+  // Content Management
   | 'CREATE_POST'
   | 'UPDATE_POST'
   | 'DELETE_POST'
   | 'PUBLISH_POST'
   | 'UNPUBLISH_POST'
+  
+  // System Events
+  | 'SYSTEM_ERROR'
+  | 'CONFIGURATION_CHANGE'
+  | 'AUDIT_LOG_VIEW'
 
 export async function createAuditLog({
   action,

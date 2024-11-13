@@ -1,26 +1,46 @@
 # Next.js Authentication Showcase
 
-*My custom auth solution that I will be implementing into my Content Management System soon*
+A modern authentication and authorization system built with Next.js 15, featuring comprehensive session management, role-based access control (RBAC), and user profile management.
 
-A modern authentication solution built with Next.js, featuring session management, role-based access control, and user profiles.
+## Key Features
 
-**Note:** This project is a showcase and not intended for production use yet!
+- 🔐 **Secure Authentication**
+  - Session-based authentication using JWT tokens
+  - HTTP-only cookies for secure session storage
+  - Password hashing with bcrypt
+  - Protection against CSRF attacks
 
-## Features
+- 👥 **Advanced Role-Based Access Control**
+  - Granular permission system
+  - Hierarchical roles (User, Manager, Admin)
+  - Dynamic role creation and management
+  - Permission-based route protection
 
-- 🔐 Secure session-based authentication using JWT tokens
-- 👥 Role-based access control (User, Super User, Manager, Admin)
-- 📊 User dashboard with profile management
-- 📝 Audit logging for security events
-- 🎨 Dynamic profile avatars with color gradients
-- 🛡️ Protected routes and API endpoints
-- 🔒 HTTP-only cookies for session management
+- 📊 **User Management**
+  - User profile management
+  - Dynamic avatar generation with color gradients
+  - Role assignment and modification
+  - User activity tracking
+
+- 📝 **Audit Logging**
+  - Comprehensive activity logging
+  - IP address and user agent tracking
+  - Security event monitoring
+  - Audit trail for compliance
+
+- 🛡️ **Security Features**
+  - Protected API routes
+  - Middleware-based route protection
+  - Input validation with Zod
+  - Type-safe database operations
 
 ## Tech Stack
 
-- Next.js 15 
-- TypeScript
-- Prisma (SQLite)
-- Tailwind CSS
-- JWT (jose)
-- bcrypt for password hashing
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Database**: Prisma with SQLite
+- **Styling**: Tailwind CSS
+- **Authentication**: JWT (jose)
+- **Security**: bcrypt, HTTP-only cookies
+- **Validation**: Zod
+

@@ -20,12 +20,20 @@ export function RolesList({ roles, canManageRoles }: RolesListProps) {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">All Roles ({roles.length})</h2>
         {canManageRoles && (
-          <Link
-            href="/admin/roles/add"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
-          >
-            Add New Role
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href="/admin/roles/add"
+              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+            >
+              Add New Role
+            </Link>
+            <Link
+              href="/admin/permissions/add"
+              className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500"
+            >
+              Add New Permission
+            </Link>
+          </div>
         )}
       </div>
       <div className="divide-y">

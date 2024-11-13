@@ -6,6 +6,7 @@ import { Permission } from "../utils/types";
 import { hasPermission } from "@/lib/permissions";
 import { ProfileAvatar } from "../components/ProfileAvatar";
 import { RolesList } from "@/app/components/RolesList";
+import Link from "next/link";
 
 async function getAllUsers() {
   const users = await prisma.user.findMany({
@@ -49,6 +50,7 @@ export default async function Admin() {
   const canViewUsers = await hasPermission(user.id, Permission.READ_USER);
   const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
   const canCreateUser = await hasPermission(user.id, Permission.CREATE_USER);
+  const canViewLogs = await hasPermission(user.id, Permission.VIEW_AUDIT_LOGS);
   const allUsers = canViewUsers ? await getAllUsers() : [];
   const roles = canViewUsers ? await getAllRoles() : [];
 
@@ -56,7 +58,17 @@ export default async function Admin() {
     <div>
       <nav className="bg-white shadow-md px-8 py-1 w-screen">
         <div className="flex items-center justify-between flex-row">
-          <h1 className="text-xl font-bold">Dashboard</h1>         
+          <div className="flex items-center space-x-6">
+            <h1 className="text-xl font-bold">Dashboard</h1>
+            {canViewLogs && (
+              <Link 
+                href="/admin/logs" 
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Audit Logs
+              </Link>
+            )}
+          </div>
           <UserMenu user={{...user, role: user.role.name}} />
         </div>
       </nav>

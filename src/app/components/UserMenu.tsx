@@ -57,7 +57,7 @@ export function UserMenu({ user }: UserMenuProps) {
         <div className="text-left">
           <p className="font-semibold">{user.name || user.email}</p>
           <p className="text-sm text-gray-600 capitalize">
-            {user.role.toLowerCase()}
+            {user.role}
           </p>
         </div>
       </button>
