@@ -11,7 +11,7 @@ import { getUser } from "@/app/utils/getUser";
 const createPermissionSchema = z.object({
   name: z.string()
     .min(2, { message: 'Name must be at least 2 characters' })
-    .regex(/^[A-Z_]+$/, { message: 'Name must be uppercase with underscores only' }),
+    .regex(/^[a-z_]+$/, { message: 'Name must be lowercase with underscores only' }),
   description: z.string().optional(),
 });
 

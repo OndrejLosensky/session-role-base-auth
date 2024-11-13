@@ -8,6 +8,9 @@ export enum Permission {
   // Role Management
   MANAGE_ROLES = 'manage_roles',
   
+  // Permission Management
+  MANAGE_PERMISSIONS = 'MANAGE_PERMISSIONS',
+  
   // Content Management
   CREATE_CONTENT = 'create_content',
   READ_CONTENT = 'read_content',

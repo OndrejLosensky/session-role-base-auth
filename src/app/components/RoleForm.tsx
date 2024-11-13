@@ -94,7 +94,7 @@ export function RoleForm({ role, onSuccess }: RoleFormProps) {
                 className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor={permission} className="ml-2 text-sm text-gray-700">
-                {permission.split('_').join(' ').toLowerCase()}
+                {permission.split('_').join(' ')}
               </label>
             </div>
           ))}

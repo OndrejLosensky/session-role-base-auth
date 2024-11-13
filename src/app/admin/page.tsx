@@ -6,6 +6,7 @@ import { Permission } from "../utils/types";
 import { hasPermission } from "@/lib/permissions";
 import { ProfileAvatar } from "../components/ProfileAvatar";
 import { RolesList } from "@/app/components/RolesList";
+import { PermissionsList } from "@/app/components/PermissionsList";
 import Link from "next/link";
 
 async function getAllUsers() {
@@ -45,14 +46,32 @@ async function getAllRoles() {
   });
 }
 
+async function getAllPermissions() {
+  return prisma.permission.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      roles: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    }
+  });
+}
+
 export default async function Admin() {
   const user = await getUser();
   const canViewUsers = await hasPermission(user.id, Permission.READ_USER);
   const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
   const canCreateUser = await hasPermission(user.id, Permission.CREATE_USER);
   const canViewLogs = await hasPermission(user.id, Permission.VIEW_AUDIT_LOGS);
+  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_PERMISSIONS);
   const allUsers = canViewUsers ? await getAllUsers() : [];
   const roles = canViewUsers ? await getAllRoles() : [];
+  const permissions = canViewUsers ? await getAllPermissions() : [];
 
   return (
     <div>
@@ -134,6 +153,7 @@ export default async function Admin() {
                   canCreateUser={canCreateUser}
                 />
                 <RolesList roles={roles} canManageRoles={canManageRoles} />
+                <PermissionsList permissions={permissions} canManagePermissions={canManagePermissions} />
               </>
             )}
           </>

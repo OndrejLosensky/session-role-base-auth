@@ -46,8 +46,11 @@ export function PermissionForm() {
           type="text"
           name="name"
           id="name"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          placeholder="READ_USER"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 lowercase"
+          placeholder="read_user"
+          onChange={(e) => {
+            e.target.value = e.target.value.toLowerCase();
+          }}
         />
         {state?.errors?.name && (
           <p className="mt-1 text-sm text-red-600">{state.errors.name[0]}</p>
@@ -82,4 +85,4 @@ export function PermissionForm() {
       </div>
     </form>
   );
-} 
+}

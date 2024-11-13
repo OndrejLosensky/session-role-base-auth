@@ -164,4 +164,14 @@ export async function updateRole(prevState: RoleState, formData: FormData) {
       },
     };
   }
+}
+
+export async function getAllPermissions() {
+  return prisma.permission.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+    },
+  });
 } 

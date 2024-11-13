@@ -27,12 +27,6 @@ export function RolesList({ roles, canManageRoles }: RolesListProps) {
             >
               Add New Role
             </Link>
-            <Link
-              href="/admin/permissions/add"
-              className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500"
-            >
-              Add New Permission
-            </Link>
           </div>
         )}
       </div>
