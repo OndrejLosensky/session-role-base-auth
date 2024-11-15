@@ -25,7 +25,8 @@ export type AuditLogAction =
   | 'GRANT_PERMISSION'
   | 'REVOKE_PERMISSION'
   | 'CREATE_PERMISSION'
-  
+  | 'UPDATE_PERMISSION'
+  | 'DELETE_PERMISSION'
   // Content Management
   | 'CREATE_POST'
   | 'UPDATE_POST'

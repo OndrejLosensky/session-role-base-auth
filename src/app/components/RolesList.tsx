@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+
+import { deleteRole } from "../admin/actions";
+import { useRouter } from "next/navigation";
 
 interface Role {
   id: string;
@@ -15,6 +20,22 @@ interface RolesListProps {
 }
 
 export function RolesList({ roles, canManageRoles }: RolesListProps) {
+  const router = useRouter();
+
+  const handleDelete = async (roleId: string, roleName: string) => {
+    if (!confirm(`Are you sure you want to delete the role "${roleName}"?`)) {
+      return;
+    }
+
+    const result = await deleteRole(roleId);
+    
+    if (result.success) {
+      router.refresh();
+    } else {
+      alert(result.error || 'Failed to delete role');
+    }
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
@@ -45,12 +66,20 @@ export function RolesList({ roles, canManageRoles }: RolesListProps) {
                   {role.permissions.length} permissions
                 </div>
                 {canManageRoles && (
-                  <Link
-                    href={`/admin/roles/${role.id}/edit`}
-                    className="text-blue-600 hover:text-blue-800 text-sm"
-                  >
-                    Edit Role
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/admin/roles/${role.id}/edit`}
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      Edit Role
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(role.id, role.name)}
+                      className="text-red-600 hover:text-red-800 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
@@ -71,4 +100,4 @@ export function RolesList({ roles, canManageRoles }: RolesListProps) {
       </div>
     </div>
   );
-} 
+}

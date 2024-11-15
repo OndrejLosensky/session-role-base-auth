@@ -6,12 +6,16 @@ import { hasPermission } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from 'zod';
+import { getUser } from "../utils/getUser";
 
 const createRoleSchema = z.object({
-  id: z.string(),
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   description: z.string().optional(),
   permissions: z.array(z.string()),
+});
+
+const updateRoleSchema = createRoleSchema.extend({
+  id: z.string(),
 });
 
 type RoleState = {
@@ -66,6 +70,17 @@ export async function getAllRoles() {
 }
 
 export async function createRole(prevState: RoleState, formData: FormData) {
+  const user = await getUser();
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  
+  if (!canManageRoles) {
+    return {
+      errors: {
+        _form: ['Unauthorized to create roles'],
+      },
+    };
+  }
+
   const validatedFields = createRoleSchema.safeParse({
     name: formData.get('name'),
     description: formData.get('description'),
@@ -95,7 +110,7 @@ export async function createRole(prevState: RoleState, formData: FormData) {
 
     await createAuditLog({
       action: 'CREATE_ROLE',
-      userId: 'system', 
+      userId: user.id, // Changed from 'system' to actual user.id
       details: {
         roleId: role.id,
         roleName: role.name,
@@ -105,7 +120,8 @@ export async function createRole(prevState: RoleState, formData: FormData) {
     revalidatePath('/admin');
     
     return { success: true };
-  } catch {
+  } catch (error) {
+    console.error('Failed to create role:', error);
     return {
       errors: {
         _form: ['Failed to create role. Please try again.'],
@@ -115,7 +131,7 @@ export async function createRole(prevState: RoleState, formData: FormData) {
 }
 
 export async function updateRole(prevState: RoleState, formData: FormData) {
-  const validatedFields = createRoleSchema.safeParse({
+  const validatedFields = updateRoleSchema.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),
     description: formData.get('description'),
@@ -174,4 +190,39 @@ export async function getAllPermissions() {
       description: true,
     },
   });
+}
+
+export async function deleteRole(id: string): Promise<{ success: boolean; error?: string }> {
+  const user = await getUser();
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  
+  if (!canManageRoles) {
+    return {
+      success: false,
+      error: 'Unauthorized to delete roles',
+    };
+  }
+
+  try {
+    await prisma.role.delete({
+      where: { id },
+    });
+
+    await createAuditLog({
+      action: 'DELETE_ROLE',
+      userId: user.id,
+      details: {
+        roleId: id,
+      },
+    });
+
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to delete role:', error);
+    return {
+      success: false,
+      error: 'Failed to delete role. Make sure no users are assigned to this role.',
+    };
+  }
 } 

@@ -4,12 +4,13 @@ export enum Permission {
   READ_USER = 'read_user',
   UPDATE_USER = 'update_user',
   DELETE_USER = 'delete_user',
+  EDIT_OWN_PROFILE = 'edit_own_profile',
   
   // Role Management
   MANAGE_ROLES = 'manage_roles',
   
   // Permission Management
-  MANAGE_PERMISSIONS = 'MANAGE_PERMISSIONS',
+  MANAGE_PERMISSIONS = 'manage_permissions',
   
   // Content Management
   CREATE_CONTENT = 'create_content',
@@ -26,7 +27,9 @@ export interface Role {
   id: string;
   name: string;
   description?: string;
-  permissions: Permission[];
+  permissions?: Permission[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface User {

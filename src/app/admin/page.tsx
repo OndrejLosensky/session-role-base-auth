@@ -139,6 +139,12 @@ export default async function Admin() {
                 <p>{new Date(user.updatedAt).toLocaleDateString()}</p>
               </div>
             </div>
+
+            <div className="mt-4">
+              <Link href="/admin/profile" className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                Edit Profile
+              </Link>
+            </div>
           </div>
         </div>
 
