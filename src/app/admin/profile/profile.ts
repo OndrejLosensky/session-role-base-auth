@@ -12,8 +12,20 @@ import bcrypt from 'bcryptjs';
 const updateProfileSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }).optional(),
   email: z.string().email({ message: 'Invalid email address' }),
-  currentPassword: z.string().min(6).optional(),
+  currentPassword: z.string().optional(),
   newPassword: z.string().min(6).optional(),
+}).refine((data) => {
+  // If either password field is provided, both must be provided
+  const hasCurrentPassword = !!data.currentPassword?.trim();
+  const hasNewPassword = !!data.newPassword?.trim();
+  
+  if (hasCurrentPassword || hasNewPassword) {
+    return hasCurrentPassword && hasNewPassword;
+  }
+  return true;
+}, {
+  message: "Both current and new password must be provided to change password",
+  path: ["currentPassword"],
 });
 
 type ProfileUpdateState = {
@@ -45,8 +57,8 @@ export async function updateUserProfile(
   const validatedFields = updateProfileSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
-    currentPassword: formData.get('currentPassword'),
-    newPassword: formData.get('newPassword'),
+    currentPassword: formData.get('currentPassword')?.toString() || undefined,
+    newPassword: formData.get('newPassword')?.toString() || undefined,
   });
 
   if (!validatedFields.success) {
@@ -75,18 +87,21 @@ export async function updateUserProfile(
         },
       };
     }
-
+    
     const updateData: {
       name?: string;
       email: string;
       password?: string;
     } = {
-      name,
       email,
     };
 
-    // If changing password, verify current password
-    if (currentPassword && newPassword) {
+    if (name?.trim()) {
+      updateData.name = name;
+    }
+
+    // Only handle password update if both password fields are provided and not empty
+    if (currentPassword?.trim() && newPassword?.trim()) {
       const dbUser = await prisma.user.findUnique({
         where: { id: user.id },
         select: { password: true }
