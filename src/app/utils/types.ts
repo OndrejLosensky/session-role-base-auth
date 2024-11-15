@@ -26,8 +26,8 @@ export enum Permission {
 export interface Role {
   id: string;
   name: string;
-  description?: string;
-  permissions?: Permission[];
+  description: string | null;
+  permissions: { name: string }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,6 +39,6 @@ export interface User {
   role: Role;
   createdAt: Date;
   updatedAt: Date;
-  profilePicture?: string | null;
-  profileColor?: string | null;
+  profilePicture: string | null;
+  profileColor: string | null;
 }

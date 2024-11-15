@@ -26,7 +26,7 @@ export default async function ProfilePage() {
       
       <div className="max-w-2xl">
         <h1 className="text-2xl font-bold mb-6">Edit Profile</h1>
-        <EditUserProfileForm user={{ ...user, role: { ...user.role, description: user.role.description ?? undefined } }} />
+        <EditUserProfileForm user={{ ...user, role: { ...user.role, description: user.role.description || null } }} />
       </div>
     </div>
   );

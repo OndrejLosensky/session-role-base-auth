@@ -35,7 +35,7 @@ export default async function LogsPage() {
         </Link>
       </div>
       
-      <div className="max-w-6xl">
+      <div className="">
         <h1 className="text-2xl font-bold mb-6">Audit Logs</h1>
         <AuditLogsList logs={logs} />
       </div>

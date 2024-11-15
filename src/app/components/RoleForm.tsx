@@ -2,7 +2,8 @@
 
 import { useActionState } from 'react';
 import { createRole, updateRole } from '../admin/actions';
-import { Permission } from '../utils/types';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 type RoleState = {
   errors?: {
@@ -22,30 +23,33 @@ interface RoleFormProps {
     description: string | null;
     permissions: { name: string }[];
   };
+  permissions: {
+    id: string;
+    name: string;
+    description: string | null;
+  }[];
   onSuccess?: () => void;
 }
 
-export function RoleForm({ role, onSuccess }: RoleFormProps) {
-  const initialState: RoleState = {
-    errors: undefined,
-    success: false
-  };
-
-  const [state, action] = useActionState<RoleState, FormData>(
+export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
+  const [state, formAction] = useActionState<RoleState, FormData>(
     role ? updateRole : createRole,
-    initialState
+    {}
   );
+  const router = useRouter();
 
-  const handleAction = async (formData: FormData) => {
-    await action(formData);
-    if (state.success && onSuccess) {
-      onSuccess();
+  useEffect(() => {
+    if (state?.success) {
+      router.push('/admin');
+      router.refresh();
+      onSuccess?.();
     }
-  };
+  }, [state?.success, router, onSuccess]);
 
   return (
-    <form action={handleAction} className="space-y-4">
+    <form action={formAction}>
       {role && <input type="hidden" name="id" value={role.id} />}
+      
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
           Role Name
@@ -78,30 +82,31 @@ export function RoleForm({ role, onSuccess }: RoleFormProps) {
         )}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
           Permissions
         </label>
-        <div className="space-y-2">
-          {Object.values(Permission).map((permission) => (
-            <div key={permission} className="flex items-center">
+        <div className="grid grid-cols-2 gap-2">
+          {permissions.map((permission) => (
+            <label key={permission.id} className="flex items-center space-x-2">
               <input
                 type="checkbox"
-                id={permission}
                 name="permissions"
-                value={permission}
-                defaultChecked={role?.permissions.some(p => p.name === permission)}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                value={permission.name}
+                defaultChecked={role?.permissions.some(p => p.name === permission.name)}
+                className="rounded border-gray-300"
               />
-              <label htmlFor={permission} className="ml-2 text-sm text-gray-700">
-                {permission.split('_').join(' ')}
-              </label>
-            </div>
+              <span className="text-sm">
+                {permission.name.toLowerCase().replace(/_/g, ' ')}
+                {permission.description && (
+                  <span className="text-gray-500 text-xs block">
+                    {permission.description}
+                  </span>
+                )}
+              </span>
+            </label>
           ))}
         </div>
-        {state?.errors?.permissions && (
-          <p className="mt-1 text-sm text-red-600">{state.errors.permissions[0]}</p>
-        )}
       </div>
 
       {state?.errors?._form && (

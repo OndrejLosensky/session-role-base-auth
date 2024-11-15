@@ -13,11 +13,13 @@ interface Permission {
 interface PermissionsListProps {
   permissions: Permission[];
   canManagePermissions: boolean;
+  permissionsCount?: number;
 }
 
 export function PermissionsList({
   permissions,
   canManagePermissions,
+  permissionsCount
 }: PermissionsListProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +50,7 @@ export function PermissionsList({
         <div className="mb-4 text-sm text-red-600">{error}</div>
       )}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">All Permissions ({permissions.length})</h2>
+        <h2 className="text-xl font-semibold">All Permissions ({permissionsCount})</h2>
         {canManagePermissions && (
           <Link
             href="/admin/permissions/add"

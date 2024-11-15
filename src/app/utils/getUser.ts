@@ -14,7 +14,20 @@ export async function getUser() {
     select: {
       id: true,
       email: true,
-      role: true,
+      role: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          permissions: {
+            select: {
+              name: true
+            }
+          },
+          createdAt: true,
+          updatedAt: true
+        }
+      },
       name: true,
       profilePicture: true,
       profileColor: true,
@@ -29,4 +42,4 @@ export async function getUser() {
   }
 
   return user
-} 
+}

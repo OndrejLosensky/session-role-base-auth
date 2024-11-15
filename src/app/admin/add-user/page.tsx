@@ -24,7 +24,7 @@ export default async function AddUserPage() {
         </Link>
       </div>
       
-      <div className="max-w-2xl">
+      <div className="">
         <h1 className="text-2xl font-bold mb-6">Add New User</h1>
         <AddNewUserForm />
       </div>

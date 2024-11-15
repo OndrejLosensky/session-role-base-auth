@@ -20,10 +20,19 @@ export default async function EditRolePage({ params }: EditRolePageProps) {
     redirect("/unauthorized");
   }
 
-  const role = await prisma.role.findUnique({
-    where: { id: params.id },
-    include: { permissions: true }
-  });
+  const [role, permissions] = await Promise.all([
+    prisma.role.findUnique({
+      where: { id: params.id },
+      include: { permissions: true }
+    }),
+    prisma.permission.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+      }
+    })
+  ]);
 
   if (!role) {
     redirect("/admin");
@@ -42,7 +51,7 @@ export default async function EditRolePage({ params }: EditRolePageProps) {
       
       <div className="max-w-2xl">
         <h1 className="text-2xl font-bold mb-6">Edit Role</h1>
-        <RoleForm role={role} />
+        <RoleForm role={role} permissions={permissions} />
       </div>
     </div>
   );

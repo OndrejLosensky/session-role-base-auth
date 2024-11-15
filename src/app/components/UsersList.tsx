@@ -31,9 +31,10 @@ interface UsersListProps {
   }[];
   currentUserId: string;
   canCreateUser: boolean;
+  usersCount?: number;
 }
 
-export function UsersList({ users, roles, currentUserId, canCreateUser }: UsersListProps) {
+export function UsersList({ users, roles, currentUserId, canCreateUser, usersCount }: UsersListProps) {
   const [selectedUser, setSelectedUser] = useState<UserListItem | null>(null);
 
   const handleUpdateRole = async (userId: string, roleId: string) => {
@@ -47,7 +48,7 @@ export function UsersList({ users, roles, currentUserId, canCreateUser }: UsersL
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">All Users ({users.length})</h2>
+        <h2 className="text-xl font-semibold">All Users ({usersCount})</h2>
         {canCreateUser && (
           <Link
             href  ="/admin/add-user"

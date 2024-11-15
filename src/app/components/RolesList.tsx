@@ -17,9 +17,11 @@ interface Role {
 interface RolesListProps {
   roles: Role[];
   canManageRoles: boolean;
+  showViewAll?: boolean;
+  rolesCount?: number;
 }
 
-export function RolesList({ roles, canManageRoles }: RolesListProps) {
+export function RolesList({ roles, canManageRoles, rolesCount }: RolesListProps) {
   const router = useRouter();
 
   const handleDelete = async (roleId: string, roleName: string) => {
@@ -39,17 +41,17 @@ export function RolesList({ roles, canManageRoles }: RolesListProps) {
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">All Roles ({roles.length})</h2>
-        {canManageRoles && (
-          <div className="flex gap-2">
+        <h2 className="text-xl font-semibold">All Roles ({rolesCount})</h2>
+        <div className="flex gap-2">          
+          {canManageRoles && (
             <Link
               href="/admin/roles/add"
               className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
             >
               Add New Role
             </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className="divide-y">
         {roles.map((role) => (
