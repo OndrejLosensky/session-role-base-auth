@@ -51,7 +51,7 @@ export function UsersList({ users, roles, currentUserId, canCreateUser, usersCou
         <h2 className="text-xl font-semibold">All Users ({usersCount})</h2>
         {canCreateUser && (
           <Link
-            href  ="/admin/add-user"
+            href  ="/admin/users/add-user"
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
           >
             Add New User

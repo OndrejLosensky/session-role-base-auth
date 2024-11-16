@@ -5,6 +5,7 @@ import { PermissionsList } from "@/app/components/PermissionsList";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getAllPermissionsNumber } from "@/app/utils/all";
 
 async function getAllPermissions() {
   return prisma.permission.findMany({
@@ -31,6 +32,7 @@ export default async function PermissionsPage() {
   }
 
   const permissions = await getAllPermissions();
+  const permisionsCount= await getAllPermissionsNumber();
 
   return (
     <div className="p-6 w-full">
@@ -48,6 +50,7 @@ export default async function PermissionsPage() {
         <PermissionsList 
           permissions={permissions}
           canManagePermissions={canManagePermissions}
+          permissionsCount={permisionsCount}
         />
       </div>
     </div>

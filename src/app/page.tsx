@@ -1,31 +1,21 @@
 import { UserMenu } from './components/UserMenu';
-import { getSession } from '@/lib/sessions';
-import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import { getUser } from './utils/getUser';
 
 export default async function Home() {
-  const session = await getSession();
-  let user = null;
+  const user = await getUser();
   
-  if (session?.userId) {
-    user = await prisma.user.findUnique({
-      where: { id: session.userId },
-      select: {
-        email: true,
-        name: true,
-        role: true,
-        profilePicture: true,
-        profileColor: true
-      }
-    });
-  }
-
   return (
     <div>
       <header className="border-b">
         <nav className="max-w-7xl mx-auto p-4 flex justify-between items-center">
           <Link href="/" className="font-bold text-xl">Session-base-role-Auth</Link>
-          <UserMenu user={user || undefined} />
+          <UserMenu user={{
+          ...user,
+          role: user.role.name,
+          profilePicture: user.profilePicture ?? null,
+          profileColor: user.profileColor ?? null
+        }} />
         </nav>
       </header>
 

@@ -79,6 +79,11 @@ export function UserMenu({ user }: UserMenuProps) {
             </Link>
           </div>
           <div className="px-4 py-2 border-b">
+            <Link href="/">
+              <p className="text-sm font-medium">Homepage</p>
+            </Link>
+          </div>
+          <div className="px-4 py-2 border-b">
             <LogoutButton />
           </div>
         </div>

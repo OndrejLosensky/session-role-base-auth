@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createAuditLog } from "@/lib/audit-logger";
+import { addMinutes } from "date-fns";
 
 const loginSchema = z.object({
   email: z.string({ message: "Invalid email address" }).trim(),
@@ -21,6 +22,9 @@ type LoginState = {
     password?: string[];
   };
 };
+
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCK_TIME_MINUTES = 15;
 
 export async function login(prevState: LoginState | undefined, formData: FormData) {
   const result = loginSchema.safeParse(Object.fromEntries(formData));
@@ -45,10 +49,54 @@ export async function login(prevState: LoginState | undefined, formData: FormDat
     }
   });
 
+  // Check if user exists and if account is locked
+  if (user) {
+    const now = new Date();
+    if (user.lockUntil && user.lockUntil > now) {
+      return {
+        errors: {
+          email: ["Account is locked. Please try again later."],
+        },
+      };
+    }
+  }
+
   // Check if user exists and password matches
   const passwordMatch = user ? await bcrypt.compare(password, user.password) : false;
 
   if (!user || !passwordMatch) {
+    if (user) {
+      // Increment failed login attempts
+      const updatedAttempts = user.failedLoginAttempts + 1;
+
+      if (isNaN(updatedAttempts)) {
+        console.error('Invalid failed login attempts value:', updatedAttempts);
+        return; // or handle the error appropriately
+      }
+
+      // Lock account if max attempts reached
+      if (updatedAttempts >= MAX_FAILED_ATTEMPTS) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            failedLoginAttempts: updatedAttempts,
+            lockUntil: addMinutes(new Date(), LOCK_TIME_MINUTES),
+          },
+        });
+        return {
+          errors: {
+            email: ["Account is locked due to too many failed login attempts."],
+          },
+        };
+      } else {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            failedLoginAttempts: updatedAttempts,
+          },
+        });
+      }
+    }
     return {
       errors: {
         email: ["Invalid email or password"],
@@ -56,12 +104,21 @@ export async function login(prevState: LoginState | undefined, formData: FormDat
     };
   }
 
+  // Reset failed login attempts on successful login
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      failedLoginAttempts: 0,
+      lockUntil: null,
+    },
+  });
+
   // Ensure user has at least USER role
   if (!user.roleId) {
     const userRole = await prisma.role.findUnique({
       where: { name: 'USER' }
     });
-    
+
     if (!userRole) {
       throw new Error('Default USER role not found');
     }
@@ -73,7 +130,7 @@ export async function login(prevState: LoginState | undefined, formData: FormDat
   }
 
   await createSession(user.id);
-  
+
   await createAuditLog({
     action: 'LOGIN',
     userId: user.id,

@@ -5,6 +5,7 @@ import { RolesList } from "@/app/components/RolesList";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getAllRolesNumber } from "@/app/utils/all";
 
 async function getAllRoles() {
   return prisma.role.findMany({
@@ -22,6 +23,8 @@ export default async function RolesPage() {
   if (!canViewRoles) {
     redirect("/unauthorized");
   }
+
+  const rolesCount= await getAllRolesNumber();
 
   const roles = await getAllRoles();
 
@@ -41,6 +44,7 @@ export default async function RolesPage() {
         <RolesList 
           roles={roles}
           canManageRoles={canManageRoles}
+          rolesCount={rolesCount}
         />
       </div>
     </div>

@@ -1,88 +1,18 @@
 import { getUser } from "@/app/utils/getUser";
 import { UsersList } from "@/app/components/UsersList";
-import { prisma } from "@/lib/prisma";
-import { Permission } from "../utils/types";
-import { hasPermission } from "@/lib/permissions";
+import { checkUserPermissions } from "@/lib/permissions";
 import { ProfileAvatar } from "../components/ProfileAvatar";
 import { RolesList } from "@/app/components/RolesList";
 import { PermissionsList } from "@/app/components/PermissionsList";
 import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
 import { getAllRolesNumber, getAllPermissionsNumber, getAllUsersNumber } from "../utils/all";
-
-async function getAllUsers(limit?: number) {
-  const users = await prisma.user.findMany({
-    take: limit,
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: {
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          permissions: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-      profilePicture: true,
-      profileColor: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return users.map((user) => ({
-    ...user,
-    role: {
-      ...user.role,
-      description: user.role.description || undefined,
-    },
-  }));
-}
-
-async function getAllRoles(limit?: number) {
-  return prisma.role.findMany({
-    take: limit,
-    include: {
-      permissions: true,
-    },
-  });
-}
-
-async function getAllPermissions(limit?: number) {
-  return prisma.permission.findMany({
-    take: limit,
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      roles: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-  });
-}
+import { getAllUsers, getAllRoles, getAllPermissions } from "./_actions/dataFetching";
 
 export default async function Admin() {
   const user = await getUser();
-  const canViewUsers = await hasPermission(user.id, Permission.READ_USER);
-  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
-  const canCreateUser = await hasPermission(user.id, Permission.CREATE_USER);
-  const canManagePermissions = await hasPermission(
-    user.id,
-    Permission.MANAGE_PERMISSIONS
-  );
+  const { canViewUsers, canManageRoles, canCreateUser, canManagePermissions } = await checkUserPermissions(user.id);
+
   const allUsers = canViewUsers ? await getAllUsers(3) : [];
   const roles = canViewUsers ? await getAllRoles(3) : [];
   const permissions = canViewUsers ? await getAllPermissions(3) : [];
@@ -93,7 +23,7 @@ export default async function Admin() {
 
   return (
     <div>
-      <div className="p-8">
+      <div className="p-8 bg-neutral-100">
         <h1 className="text-2xl font-bold mb-6">
           Welcome 👋, {user.name || user.email}!
         </h1>
@@ -212,7 +142,7 @@ export default async function Admin() {
               permissionsCount={permissionsCount}
             />
           </div>
-        )}       
+        )}
       </div>
     </div>
   );

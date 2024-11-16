@@ -5,6 +5,7 @@ import { UsersList } from "@/app/components/UsersList";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getAllUsersNumber } from "@/app/utils/all";
 
 async function getAllUsers() {
   return prisma.user.findMany({
@@ -52,6 +53,7 @@ export default async function UsersPage() {
 
   const users = await getAllUsers();
   const roles = await getAllRoles();
+  const usersCount = await getAllUsersNumber();
 
   return (
     <div className="p-6 w-full">
@@ -71,6 +73,7 @@ export default async function UsersPage() {
           roles={roles}
           currentUserId={user.id}
           canCreateUser={canCreateUser}
+          usersCount={usersCount}
         />
       </div>
     </div>

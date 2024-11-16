@@ -24,6 +24,8 @@ model User {
   updatedAt      DateTime  @updatedAt
   profilePicture String?
   profileColor   String?   
+  failedLoginAttempts Int     @default(0)
+  lockUntil         DateTime? // This will store the time until the account is locked
 }
 
 model AuditLog {

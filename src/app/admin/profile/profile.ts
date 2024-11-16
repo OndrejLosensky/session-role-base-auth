@@ -70,7 +70,6 @@ export async function updateUserProfile(
   const { name, email, currentPassword, newPassword } = validatedFields.data;
 
   try {
-    // Check if email is already taken by another user
     const existingUser = await prisma.user.findFirst({
       where: {
         email,
@@ -100,7 +99,6 @@ export async function updateUserProfile(
       updateData.name = name;
     }
 
-    // Only handle password update if both password fields are provided and not empty
     if (currentPassword?.trim() && newPassword?.trim()) {
       const dbUser = await prisma.user.findUnique({
         where: { id: user.id },
