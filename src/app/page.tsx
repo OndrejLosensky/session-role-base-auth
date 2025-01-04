@@ -44,7 +44,7 @@ export default async function Home() {
               </Link>
             )}
             <a
-              href="https://github.com/yourusername/auth-showcase"
+              href="https://github.com/OndrejLosensky/session-role-base-auth"
               className="text-sm font-semibold leading-6 text-gray-900"
               target="_blank"
               rel="noopener noreferrer"
