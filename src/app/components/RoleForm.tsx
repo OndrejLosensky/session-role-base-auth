@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { createRole, updateRole } from '../admin/actions';
+import { createRole, updateRole } from '../dashboard/settings/actions';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -40,7 +40,7 @@ export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
 
   useEffect(() => {
     if (state?.success) {
-      router.push('/admin');
+      router.push('/dashboard');
       router.refresh();
       onSuccess?.();
     }

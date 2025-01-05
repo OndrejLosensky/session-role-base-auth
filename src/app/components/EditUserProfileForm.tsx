@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-import { updateUserProfile } from '@/app/admin/profile/profile'
+import { updateUserProfile } from '@/app/dashboard/profile/profile'
 import { User } from '@/app/utils/types'
 
 interface EditUserProfileFormProps {

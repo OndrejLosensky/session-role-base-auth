@@ -2,6 +2,8 @@
 
 A modern authentication and authorization system built with Next.js 15, featuring comprehensive session management, role-based access control (RBAC), and user profile management.
 
+**Currently is has some issues with seed.ts and logging in**
+
 ## Key Features
 
 - 🔐 **Secure Authentication**

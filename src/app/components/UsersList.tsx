@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ProfileAvatar } from "./ProfileAvatar";
 import { UserPermissionsDialog } from './UserPermissionsDialog';
-import { updateUserRole } from '../admin/actions';
+import { updateUserRole } from '../dashboard/settings/actions';
 import Link from 'next/link';
 interface UserListItem {
   id: string;
@@ -51,7 +51,7 @@ export function UsersList({ users, roles, currentUserId, canCreateUser, usersCou
         <h2 className="text-xl font-semibold">All Users ({usersCount})</h2>
         {canCreateUser && (
           <Link
-            href  ="/admin/users/add-user"
+            href  ="/dashboard/settings/users/add-user"
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
           >
             Add New User

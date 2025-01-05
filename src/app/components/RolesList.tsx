@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { deleteRole } from "../admin/actions";
+import { deleteRole } from "../dashboard/settings/actions";
 import { useRouter } from "next/navigation";
 
 interface Role {
@@ -45,7 +45,7 @@ export function RolesList({ roles, canManageRoles, rolesCount }: RolesListProps)
         <div className="flex gap-2">          
           {canManageRoles && (
             <Link
-              href="/admin/roles/add"
+              href="/dashboard/settings/roles/add"
               className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
             >
               Add New Role
@@ -70,7 +70,7 @@ export function RolesList({ roles, canManageRoles, rolesCount }: RolesListProps)
                 {canManageRoles && (
                   <div className="flex items-center gap-2">
                     <Link
-                      href={`/admin/roles/${role.id}/edit`}
+                      href={`/dashboard/settings/roles/${role.id}/edit`}
                       className="text-blue-600 hover:text-blue-800 text-sm"
                     >
                       Edit Role

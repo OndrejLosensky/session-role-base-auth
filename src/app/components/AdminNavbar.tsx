@@ -1,29 +1,30 @@
- "use client";
+"use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserMenu } from "./UserMenu";
 import { User } from "../utils/types";
+import { DashboardFeatureFlag, isFeatureEnabled } from "../utils/featureFlags";
 
 interface AdminNavbarProps {
-    user?: User;
-    canViewUsers?: boolean;
-    canManageRoles?: boolean;
-    canManagePermissions?: boolean;
-    canViewLogs?: boolean;
-  }
+  user?: User;
+  canViewUsers?: boolean;
+  canManageRoles?: boolean;
+  canManagePermissions?: boolean;
+  canViewLogs?: boolean;
+}
 
-export function AdminNavbar({ user, canViewUsers, canManageRoles, canManagePermissions, canViewLogs }: AdminNavbarProps) {
+export function AdminNavbar({ user }: AdminNavbarProps) {
   const pathname = usePathname();
 
   if (!user) return null;
 
-
   const isActive = (path: string) => {
-    if (path === '/admin' && pathname === '/admin') {
+    if (path === "/dashboard" && pathname === "/dashboard") {
       return true;
     }
-    if (path !== '/admin' && pathname.startsWith(path)) {
+    if (path !== "/dashboard" && pathname.startsWith(path)) {
       return true;
     }
     return false;
@@ -37,54 +38,39 @@ export function AdminNavbar({ user, canViewUsers, canManageRoles, canManagePermi
     }`;
 
   return (
-    <nav className="sticky top-0 bg-white shadow-md px-8 py-2 w-screen">
+    <nav className="sticky top-0 bg-white shadow-sm px-4 py-2 w-screen">
       <div className="flex items-center justify-between flex-row">
         <div className="flex items-center space-x-1">
-          <Link 
-            href="/admin" 
-            className={linkClass('/admin')}
-          >
+          <Link href="/dashboard" className={linkClass("/dashboard")}>
             Dashboard
           </Link>
-          {canViewUsers && (
-            <Link 
-              href="/admin/users" 
-              className={linkClass('/admin/users')}
+          {isFeatureEnabled(DashboardFeatureFlag.PROFILE) && (
+            <Link
+              href="/dashboard/profile"
+              className={linkClass("/dashboard/profile")}
             >
-              Users
+              Profile
             </Link>
           )}
-          {canManageRoles && (
-            <Link 
-              href="/admin/roles" 
-              className={linkClass('/admin/roles')}
+          {isFeatureEnabled(DashboardFeatureFlag.SETTINGS) && (
+            <Link
+              href="/dashboard/settings"
+              className={linkClass("/dashboard/settings")}
             >
-              Roles
-            </Link>
-          )}
-          {canManagePermissions && (
-            <Link 
-              href="/admin/permissions" 
-              className={linkClass('/admin/permissions')}
-            >
-              Permissions
-            </Link>
-          )}
-          {canViewLogs && (
-            <Link 
-              href="/admin/logs" 
-              className={linkClass('/admin/logs')}
-            >
-              Audit Logs
+              Settings
             </Link>
           )}
         </div>
-        <UserMenu user={{
-          ...user,
-          role: user.role.name,
-          profilePicture: user.profilePicture ?? null,
-          profileColor: user.profileColor ?? null
-        }} />
+        {isFeatureEnabled(DashboardFeatureFlag.USER_MENU) && (
+          <UserMenu
+            user={{
+              ...user,
+              role: user.role.name,
+              profilePicture: user.profilePicture ?? null,
+              profileColor: user.profileColor ?? null,
+            }}
+          />
+        )}
       </div>
     </nav>
   );

@@ -69,12 +69,12 @@ export function UserMenu({ user }: UserMenuProps) {
             <p className="text-xs text-gray-500">{user.email}</p>
           </div>
           <div className="px-4 py-2 border-b">
-            <Link href="/admin">
+            <Link href="/dashboard">
               <p className="text-sm font-medium">Dashboard</p>
             </Link>
           </div>
           <div className="px-4 py-2 border-b">
-            <Link href="/admin/profile">
+            <Link href="/dashboard/settings/profile">
               <p className="text-sm font-medium">Profile</p>
             </Link>
           </div>

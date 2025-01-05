@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { deletePermission } from "@/app/admin/permissions/actions";
+import { deletePermission } from "@/app/dashboard/settings/permissions/actions";
 
 interface Permission {
   id: string;
@@ -53,7 +53,7 @@ export function PermissionsList({
         <h2 className="text-xl font-semibold">All Permissions ({permissionsCount})</h2>
         {canManagePermissions && (
           <Link
-            href="/admin/permissions/add"
+            href="/dashboard/settings/permissions/add"
             className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500"
           >
             Add New Permission
@@ -72,7 +72,7 @@ export function PermissionsList({
             {canManagePermissions && (
               <div className="flex space-x-2">
                 <Link
-                  href={`/admin/permissions/${permission.id}/edit`}
+                  href={`/dashboard/settings/permissions/${permission.id}/edit`}
                   className="text-blue-600 hover:text-blue-800"
                 >
                   Edit

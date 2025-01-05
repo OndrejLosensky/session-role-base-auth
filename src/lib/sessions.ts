@@ -1,87 +1,79 @@
-import "server-only";
-import { SignJWT, jwtVerify, JWTPayload } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
-const secretKey = process.env.SESSION_SECRET;
-if (!secretKey) {
-  throw new Error("SESSION_SECRET is not defined in environment variables.");
-}
-const encodedKey = new TextEncoder().encode(secretKey);
+const secretKey = process.env.JWT_SECRET_KEY || "your-secret-key";
+const key = new TextEncoder().encode(secretKey);
 
-type SessionPayload = {
+interface SessionData {
   userId: string;
-  expiresAt: number;
-};
+  email: string;
+  role: string;
+  [key: string]: unknown;
+}
 
-export async function getSession(): Promise<SessionPayload | null> {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("session");
-  
-  if (!session) {
+export async function encrypt(payload: SessionData): Promise<string> {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("24h")
+    .sign(key);
+}
+
+export async function decrypt(input: string): Promise<SessionData | null> {
+  try {
+    const { payload } = await jwtVerify(input, key, {
+      algorithms: ["HS256"],
+    });
+    return payload as SessionData;
+  } catch (error) {
+    console.error("Failed to decrypt session:", error);
     return null;
   }
-
-  return decrypt(session.value);
 }
 
 export async function createSession(userId: string) {
-  const expiresAt = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // 7 days expiration
-  const session = await encrypt({ userId, expiresAt });
-
-  const cookieStore = await cookies();
-  cookieStore.set("session", session, {
+  const session = await encrypt({ userId, email: "", role: "" });
+  cookies().set("session", session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    path: "/",
-    expires: new Date(expiresAt * 1000), // UNIX timestamp to Date object
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
   });
 }
 
 export async function deleteSession() {
-  const cookieStore = await cookies();
-  cookieStore.delete({
-    name: "session",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-  });
+  cookies().delete("session");
 }
 
-async function encrypt(payload: SessionPayload): Promise<string> {
-  return new SignJWT(payload as JWTPayload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime(payload.expiresAt)
-    .sign(encodedKey);
-}
-
-// Re-export decrypt for middleware
-export async function decrypt(session: string): Promise<SessionPayload | null> {
-  if (!session) return null;
-
+// Get session data from cookie
+export async function getSession(): Promise<SessionData | null> {
   try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ["HS256"],
-    });
-
-    if (!payload.userId || !payload.expiresAt) {
-      throw new Error("Invalid session payload.");
-    }
-
-    const sessionPayload = {
-      userId: payload.userId as string,
-      expiresAt: payload.expiresAt as number,
-    };
-
-    if (Date.now() / 1000 > sessionPayload.expiresAt) {
+    const session = cookies().get("session");
+    
+    if (!session) {
       return null;
     }
 
-    return sessionPayload;
+    return await decrypt(session.value);
   } catch (error) {
-    console.error("Failed to decrypt session:", error);
+    console.error("Failed to get session:", error);
+    return null;
+  }
+}
+
+// Update session data
+export async function updateSession(request: NextRequest): Promise<SessionData | null> {
+  try {
+    const session = request.cookies.get("session");
+    
+    if (!session) {
+      return null;
+    }
+
+    return await decrypt(session.value);
+  } catch (error) {
+    console.error("Failed to update session:", error);
     return null;
   }
 }

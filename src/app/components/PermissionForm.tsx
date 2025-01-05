@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { createPermission, updatePermission } from "@/app/admin/permissions/actions";
+import { createPermission, updatePermission } from "@/app/dashboard/settings/permissions/actions";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
@@ -37,7 +37,7 @@ export function PermissionForm({ permission }: PermissionFormProps) {
     await formAction(formData);
     startTransition(() => {
       if (state.success) {
-        router.push('/admin');
+        router.push('/dashboard');
         router.refresh();
       }
     });
