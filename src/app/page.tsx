@@ -10,7 +10,7 @@ export default async function Home() {
     <div>
       <header className="border-b">
         <nav className="max-w-7xl mx-auto p-4 flex justify-between items-center">
-          <Link href="/" className="font-bold text-xl"> Démonická </Link>
+          <Link href="/" className="font-bold text-xl"> Session role based auth boilerplate </Link>
           {isAuthenticated ? (
             <UserMenu user={{
               ...user,

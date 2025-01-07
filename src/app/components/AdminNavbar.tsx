@@ -49,18 +49,7 @@ export function AdminNavbar({
             Dashboard
           </Link>
 
-          <Link
-            href="/dashboard/uzivatele"
-            className={linkClass("/dashboard/uzivatele")}
-          >
-            Users
-          </Link>
-
-          <Link href="/dashboard/sudy" className={linkClass("/dashboard/sudy")}>
-            Jugs management
-          </Link>
-
-          <Link href="/dashboard/historie" className={linkClass("/dashboard/historie")}>
+          <Link href="/dashboard/history" className={linkClass("/dashboard/history")}>
             History
           </Link>
 
