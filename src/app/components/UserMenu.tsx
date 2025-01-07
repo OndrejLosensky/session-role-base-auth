@@ -46,7 +46,7 @@ export function UserMenu({ user }: UserMenuProps) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-4 hover:bg-gray-100 duration-150 py-2 px-4 rounded-lg transition-colors"
+        className="flex items-center gap-4 hover:bg-gray-100 duration-150 my-2 py-2 px-4 rounded-lg transition-colors"
       >
         <ProfileAvatar
           profilePicture={user.profilePicture}
@@ -56,8 +56,7 @@ export function UserMenu({ user }: UserMenuProps) {
         />
 
         <div className="text-left">
-          <p className="font-semibold text-sm">{user.name || user.email}</p>
-          <p className="text-xs text-gray-600 capitalize">{user.role}</p>
+          <p className="font-semibold text-sm">{user.name || user.email}</p>          
         </div>
       </button>
 

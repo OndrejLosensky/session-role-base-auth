@@ -6,6 +6,9 @@ import { usePathname } from "next/navigation";
 import { UserMenu } from "./UserMenu";
 import { User } from "../utils/types";
 import { DashboardFeatureFlag, isFeatureEnabled } from "../utils/featureFlags";
+import { FaTachometerAlt, FaUsers, FaBeer, FaHistory, FaUser, FaCog } from 'react-icons/fa';
+
+import data from "@/resources.json";
 
 interface AdminNavbarProps {
   user?: User;
@@ -42,26 +45,26 @@ export function AdminNavbar({
     }`;
 
   return (
-    <nav className="sticky top-0 bg-white shadow-sm px-4 py-2 w-screen">
+    <nav className="sticky top-0 bg-white shadow-sm px-4 w-screen">
       <div className="flex items-center justify-between flex-row">
         <div className="flex items-center space-x-1">
           <Link href="/dashboard" className={linkClass("/dashboard")}>
-            Dashboard
+            <FaTachometerAlt className="inline-block mr-1" /> {data.dashboard.links.dashboard}
           </Link>
 
           <Link
             href="/dashboard/uzivatele"
             className={linkClass("/dashboard/uzivatele")}
           >
-            Users
+            <FaUsers className="inline-block mr-1" />  {data.dashboard.links.users}
           </Link>
 
           <Link href="/dashboard/sudy" className={linkClass("/dashboard/sudy")}>
-            Jugs management
+            <FaBeer className="inline-block mr-1" />  {data.dashboard.links.jugs}
           </Link>
 
           <Link href="/dashboard/historie" className={linkClass("/dashboard/historie")}>
-            History
+            <FaHistory className="inline-block mr-1" />  {data.dashboard.links.history}
           </Link>
 
           {isFeatureEnabled(DashboardFeatureFlag.PROFILE) && canViewProfile && (
@@ -69,7 +72,7 @@ export function AdminNavbar({
               href="/dashboard/profile"
               className={linkClass("/dashboard/profile")}
             >
-              Profile
+              <FaUser className="inline-block mr-1" />  {data.dashboard.links.profile}
             </Link>
           )}
           {isFeatureEnabled(DashboardFeatureFlag.SETTINGS) &&
@@ -78,7 +81,7 @@ export function AdminNavbar({
                 href="/dashboard/settings"
                 className={linkClass("/dashboard/settings")}
               >
-                Settings
+                <FaCog className="inline-block mr-1" /> {data.dashboard.links.settings}
               </Link>
             )}
         </div>

@@ -30,6 +30,7 @@ export async function middleware(req: NextRequest) {
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+    'x-pathname': path,
   });
 
   // Handle API routes
@@ -54,13 +55,17 @@ export async function middleware(req: NextRequest) {
   // Handle protected routes
   if (isProtectedRoute && !isAuthenticated) {
     const redirectUrl = new URL('/login', req.url);
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(redirectUrl, {
+      headers: headers,
+    });
   }
 
   // Handle public routes when authenticated
   if (isPublicRoute && isAuthenticated) {
     const redirectUrl = new URL('/dashboard', req.url);
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(redirectUrl, {
+      headers: headers,
+    });
   }
 
   // For all other routes, just add security headers

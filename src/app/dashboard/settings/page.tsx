@@ -17,6 +17,8 @@ export default async function SettingsPage() {
         { href: "/dashboard/settings/roles", title: "Roles", description: "Manage user roles and their permissions." },
         { href: "/dashboard/settings/permissions", title: "Permissions", description: "Manage user permissions." },
         { href: "/dashboard/settings/logs", title: "Audit Logs", description: "View and manage audit logs." },
+        { href: "/dashboard/settings/sudy", title: "Beer jugs", description: "View and manage beer jugs global settings." },
+        { href: "/dashboard/settings/uzivatele", title: "Users", description: "View and manage user global settings." },
     ];
 
     return (

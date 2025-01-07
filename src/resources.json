@@ -1,0 +1,14 @@
+{    
+    "dashboard": {
+        "links": {
+            "dashboard": "Přehled",
+            "jugs": "Sudy",
+            "users": "Uživatelé",
+            "history": "Historie",
+            "profile": "Profil",
+            "settings": "Nastavení"
+        }
+    },
+
+    "login": "Přihlásit se"
+}

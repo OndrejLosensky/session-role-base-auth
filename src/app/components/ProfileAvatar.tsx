@@ -8,7 +8,7 @@ interface ProfileAvatarProps {
 }
 
 const sizes = {
-  sm: 'w-10 h-10',
+  sm: 'w-8 h-8',
   md: 'w-16 h-16',
   lg: 'w-24 h-24'
 };
@@ -32,7 +32,7 @@ export function ProfileAvatar({ profilePicture, profileColor, name, size = 'md' 
 
   return (
     <div 
-      className={`${sizeClass} rounded-full flex items-center justify-center text-white font-semibold`}
+      className={`${sizeClass} rounded-full text-xs flex items-center justify-center text-white font-semibold`}
       style={{ 
         background: profileColor || 'linear-gradient(135deg, #6366f1, #a855f7)'
       }}
