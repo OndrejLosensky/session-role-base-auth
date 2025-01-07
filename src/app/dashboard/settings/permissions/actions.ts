@@ -34,7 +34,7 @@ type PermissionState = {
 
 export async function createPermission(prevState: PermissionState, formData: FormData): Promise<PermissionState> {
   const user = await getUser();
-  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
   
   if (!canManageRoles) {
     return {
@@ -88,7 +88,7 @@ export async function createPermission(prevState: PermissionState, formData: For
 
 export async function updatePermission(prevState: PermissionState, formData: FormData): Promise<PermissionState> {
   const user = await getUser();
-  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_PERMISSIONS);
+  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
   
   if (!canManagePermissions) {
     return {
@@ -151,7 +151,7 @@ export async function updatePermission(prevState: PermissionState, formData: For
 
 export async function deletePermission(id: string): Promise<{ success: boolean; error?: string }> {
   const user = await getUser();
-  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_PERMISSIONS);
+  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
   
   if (!canManagePermissions) {
     return {

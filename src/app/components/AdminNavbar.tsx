@@ -9,13 +9,17 @@ import { DashboardFeatureFlag, isFeatureEnabled } from "../utils/featureFlags";
 
 interface AdminNavbarProps {
   user?: User;
-  canViewUsers?: boolean;
-  canManageRoles?: boolean;
-  canManagePermissions?: boolean;
-  canViewLogs?: boolean;
+  canManageUserData?: boolean;
+  canViewSettings?: boolean;
+  canViewProfile?: boolean;  
 }
 
-export function AdminNavbar({ user }: AdminNavbarProps) {
+export function AdminNavbar({
+  user,
+  canManageUserData,
+  canViewSettings,
+  canViewProfile,
+}: AdminNavbarProps) {
   const pathname = usePathname();
 
   if (!user) return null;
@@ -44,7 +48,23 @@ export function AdminNavbar({ user }: AdminNavbarProps) {
           <Link href="/dashboard" className={linkClass("/dashboard")}>
             Dashboard
           </Link>
-          {isFeatureEnabled(DashboardFeatureFlag.PROFILE) && (
+
+          <Link
+            href="/dashboard/uzivatele"
+            className={linkClass("/dashboard/uzivatele")}
+          >
+            Users
+          </Link>
+
+          <Link href="/dashboard/sudy" className={linkClass("/dashboard/sudy")}>
+            Jugs management
+          </Link>
+
+          <Link href="/dashboard/historie" className={linkClass("/dashboard/historie")}>
+            History
+          </Link>
+
+          {isFeatureEnabled(DashboardFeatureFlag.PROFILE) && canViewProfile && (
             <Link
               href="/dashboard/profile"
               className={linkClass("/dashboard/profile")}
@@ -52,16 +72,17 @@ export function AdminNavbar({ user }: AdminNavbarProps) {
               Profile
             </Link>
           )}
-          {isFeatureEnabled(DashboardFeatureFlag.SETTINGS) && (
-            <Link
-              href="/dashboard/settings"
-              className={linkClass("/dashboard/settings")}
-            >
-              Settings
-            </Link>
-          )}
+          {isFeatureEnabled(DashboardFeatureFlag.SETTINGS) &&
+            canViewSettings && (
+              <Link
+                href="/dashboard/settings"
+                className={linkClass("/dashboard/settings")}
+              >
+                Settings
+              </Link>
+            )}
         </div>
-        {isFeatureEnabled(DashboardFeatureFlag.USER_MENU) && (
+        {isFeatureEnabled(DashboardFeatureFlag.USER_MENU) && canManageUserData && (
           <UserMenu
             user={{
               ...user,

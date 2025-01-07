@@ -4,7 +4,7 @@ export default async function Admin() {
   const user = await getUser();
   return (
     <div>
-      <div className="p-4">
+      <div>
         <h1 className="text-2xl font-bold">
           Welcome 👋, {user.name || user.email}!
         </h1>

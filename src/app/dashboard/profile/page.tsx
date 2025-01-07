@@ -2,7 +2,6 @@ import { getUser } from "@/app/utils/getUser";
 import { Permission } from "@/app/utils/types";
 import { hasPermission } from "@/lib/permissions";
 import { EditUserProfileForm } from "@/app/components/EditUserProfileForm";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ProfileAvatar } from "../../components/ProfileAvatar";
 import {
@@ -14,11 +13,15 @@ export default async function ProfilePage() {
   const user = await getUser();
   const canEditProfile = await hasPermission(
     user.id,
-    Permission.EDIT_OWN_PROFILE
+    Permission.MANAGE_SETTINGS
   );
 
   if (!canEditProfile) {
-    redirect("/unauthorized");
+    return (
+      <div>
+        Insufficient permissions: {Permission.MANAGE_SETTINGS}
+      </div>
+    );
   }
 
   return (

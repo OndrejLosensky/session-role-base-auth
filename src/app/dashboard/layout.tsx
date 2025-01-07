@@ -10,24 +10,24 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const user = await getUser();
- 
-  const canViewUsers = await hasPermission(user.id, Permission.READ_USER);
-  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
-  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_PERMISSIONS);
-  const canViewLogs = await hasPermission(user.id, Permission.VIEW_AUDIT_LOGS);
+   
+  const canManageUserData = await hasPermission(user.id, Permission.CREATE_USER && Permission.DELETE_USER || Permission.MANAGE_SETTINGS);
+  const canViewSettings = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
+  const canViewProfile = await hasPermission(user.id, Permission.VIEW_PROFILE);
 
   return (
     <>
       {isFeatureEnabled(DashboardFeatureFlag.ADMIN_NAVBAR) && (
         <AdminNavbar 
-          user={user}
-          canViewUsers={canViewUsers}
-          canManageRoles={canManageRoles}
-          canManagePermissions={canManagePermissions}
-          canViewLogs={canViewLogs}
+          user={user}         
+          canManageUserData={canManageUserData}
+          canViewSettings={canViewSettings}
+          canViewProfile={canViewProfile}
         />
       )}
-      {children}
+      <div className="p-4">
+        {children}
+      </div>
     </>
   );
 }

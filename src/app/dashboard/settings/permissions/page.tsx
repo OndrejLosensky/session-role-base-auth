@@ -4,7 +4,6 @@ import { hasPermission } from "@/lib/permissions";
 import { PermissionsList } from "@/app/components/PermissionsList";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getAllPermissionsNumber } from "@/app/utils/all";
 
 async function getAllPermissions() {
@@ -25,14 +24,18 @@ async function getAllPermissions() {
 
 export default async function PermissionsPage() {
   const user = await getUser();
-  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_PERMISSIONS);
+  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 
   if (!canManagePermissions) {
-    redirect("/unauthorized");
+    return (
+      <div>
+        Insufficient permissions: {Permission.MANAGE_SETTINGS}
+      </div>
+    );
   }
 
   const permissions = await getAllPermissions();
-  const permisionsCount= await getAllPermissionsNumber();
+  const permissionsCount = await getAllPermissionsNumber();
 
   return (
     <div className="p-6 w-full">
@@ -44,13 +47,12 @@ export default async function PermissionsPage() {
           ← Back to Dashboard
         </Link>
       </div>
-      
       <div className="">
         <h1 className="text-2xl font-bold mb-6">Permissions Management</h1>
         <PermissionsList 
           permissions={permissions}
           canManagePermissions={canManagePermissions}
-          permissionsCount={permisionsCount}
+          permissionsCount={permissionsCount}
         />
       </div>
     </div>

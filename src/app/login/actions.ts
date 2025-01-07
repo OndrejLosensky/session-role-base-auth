@@ -7,6 +7,8 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createAuditLog } from "@/lib/audit-logger";
 import { addMinutes } from "date-fns";
+import { Permission } from "../utils/types";
+import { hasPermission } from "@/lib/permissions";
 
 const loginSchema = z.object({
   email: z.string({ message: "Invalid email address" }).trim(),
@@ -23,8 +25,8 @@ type LoginState = {
   };
 };
 
-const MAX_FAILED_ATTEMPTS = 5;
-const LOCK_TIME_MINUTES = 15;
+const MAX_FAILED_ATTEMPTS = 555;
+const LOCK_TIME_MINUTES = 1;
 
 export async function login(prevState: LoginState | undefined, formData: FormData) {
   const result = loginSchema.safeParse(Object.fromEntries(formData));
@@ -140,7 +142,10 @@ export async function login(prevState: LoginState | undefined, formData: FormDat
     }
   });
 
-  redirect("/admin");
+  const canManageUserData = await hasPermission(user.id, Permission.CREATE_USER && Permission.DELETE_USER);
+  
+  // Redirect based on permissions
+  redirect(canManageUserData ? "/dashboard" : "/");
 }
 
 export async function logout() {

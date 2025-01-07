@@ -1,9 +1,9 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
+import { useFormStatus, useFormState } from "react-dom";
 import { createUser } from "./actions";
 import { generateGradient } from "@/app/utils/generateGradient";
-import { useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -20,7 +20,7 @@ function SubmitButton() {
 }
 
 export function AddNewUserForm() {
-  const [state, formAction] = useActionState(createUser, {
+  const [state, formAction] = useFormState(createUser, {
     errors: {},
     success: false,
   });
@@ -92,8 +92,8 @@ export function AddNewUserForm() {
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="user">User</option>
-          <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
+          <option value="admin">Bartender</option>
+          <option value="manager">Admin</option>
         </select>
         {state.errors?.roleId && (
           <p className="mt-1 text-sm text-red-600">{state.errors.roleId}</p>

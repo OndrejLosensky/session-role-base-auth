@@ -1,22 +1,11 @@
 export enum Permission {
-  // User Management
-  CREATE_USER = 'create_user',
-  READ_USER = 'read_user',
-  UPDATE_USER = 'update_user',
-  DELETE_USER = 'delete_user',
-  EDIT_OWN_PROFILE = 'edit_own_profile',
-  
-  // Role Management
-  MANAGE_ROLES = 'manage_roles',
-  
-  // Permission Management
-  MANAGE_PERMISSIONS = 'manage_permissions',
-  
-  // Content Management
-  CREATE_CONTENT = 'create_content',
+  // Content management 
   READ_CONTENT = 'read_content',
-  UPDATE_CONTENT = 'update_content',
-  DELETE_CONTENT = 'delete_content',
+
+  // User Management
+  CREATE_USER = 'create_user',  
+  DELETE_USER = 'delete_user',
+  VIEW_PROFILE = 'view_profile',
   
   // System Management
   VIEW_AUDIT_LOGS = 'view_audit_logs',

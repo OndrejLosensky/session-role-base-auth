@@ -4,7 +4,6 @@ import { hasPermission } from "@/lib/permissions";
 import { RolesList } from "@/app/components/RolesList";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getAllRolesNumber } from "@/app/utils/all";
 
 async function getAllRoles() {
@@ -16,16 +15,18 @@ async function getAllRoles() {
 }
 
 export default async function RolesPage() {
-  const user = await getUser();
-  const canViewRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
-  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  const user = await getUser();  
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 
-  if (!canViewRoles) {
-    redirect("/unauthorized");
+  if (!canManageRoles) {
+    return (
+      <div>
+        Insufficient permissions: {Permission.MANAGE_SETTINGS}
+      </div>
+    );
   }
 
-  const rolesCount= await getAllRolesNumber();
-
+  const rolesCount = await getAllRolesNumber();
   const roles = await getAllRoles();
 
   return (
@@ -38,7 +39,6 @@ export default async function RolesPage() {
           ← Back to settings
         </Link>
       </div>
-      
       <div className="">
         <h1 className="text-2xl font-bold mb-6">Roles Management</h1>
         <RolesList 

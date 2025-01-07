@@ -14,7 +14,7 @@ interface EditRolePageProps {
 
 export default async function EditRolePage({ params }: EditRolePageProps) {
   const user = await getUser();
-  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 
   if (!canManageRoles) {
     redirect("/unauthorized");

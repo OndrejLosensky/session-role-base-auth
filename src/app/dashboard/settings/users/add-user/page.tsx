@@ -1,7 +1,6 @@
 import { getUser } from "@/app/utils/getUser";
 import { Permission } from "@/app/utils/types";
 import { hasPermission } from "@/lib/permissions";
-import { redirect } from "next/navigation";
 import { AddNewUserForm } from "./AddNewUserForm";
 import Link from "next/link";
 
@@ -10,7 +9,11 @@ export default async function AddUserPage() {
   const canCreateUser = await hasPermission(user.id, Permission.CREATE_USER);
 
   if (!canCreateUser) {
-    redirect("/unauthorized");
+    return (
+      <div>
+        Insufficient permissions: {Permission.MANAGE_SETTINGS}
+      </div>
+    );
   }
 
   return (
@@ -23,7 +26,6 @@ export default async function AddUserPage() {
           ← Back to Dashboard
         </Link>
       </div>
-      
       <div className="">
         <h1 className="text-2xl font-bold mb-6">Add New User</h1>
         <AddNewUserForm />

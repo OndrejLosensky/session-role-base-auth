@@ -4,7 +4,7 @@ import { hasPermission } from "@/lib/permissions";
 import { UsersList } from "@/app/components/UsersList";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+
 import { getAllUsersNumber } from "@/app/utils/all";
 
 async function getAllUsers() {
@@ -43,12 +43,15 @@ async function getAllRoles() {
 }
 
 export default async function UsersPage() {
-  const user = await getUser();
-  const canViewUsers = await hasPermission(user.id, Permission.READ_USER);
-  const canCreateUser = await hasPermission(user.id, Permission.CREATE_USER);
+  const user = await getUser();  
+  const canManageSettings = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 
-  if (!canViewUsers) {
-    redirect("/unauthorized");
+  if (!canManageSettings) {
+    return (
+      <div>
+        Insuficient permissions 
+      </div>
+    )
   }
 
   const users = await getAllUsers();
@@ -72,7 +75,7 @@ export default async function UsersPage() {
           users={users} 
           roles={roles}
           currentUserId={user.id}
-          canCreateUser={canCreateUser}
+          canCreateUser={canManageSettings}
           usersCount={usersCount}
         />
       </div>

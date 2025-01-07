@@ -6,7 +6,7 @@ import { PermissionForm } from "@/app/components/PermissionForm";
 
 export default async function AddPermissionPage() {
   const user = await getUser();
-  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_ROLES);
+  const canManageRoles = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 
   if (!canManageRoles) {
     return null;

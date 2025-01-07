@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { decrypt } from "@/lib/sessions";
 
 // Define route patterns
-const protectedRoutes = ["/admin", "/admin/:path*"];
+const protectedRoutes = ["/dashboard", "/dashboard/:path*"];
 const publicRoutes = ["/login", "/register"];
 const authRoutes = ["/api/auth/:path*"];
 
@@ -53,17 +53,17 @@ export async function middleware(req: NextRequest) {
 
   // Handle protected routes
   if (isProtectedRoute && !isAuthenticated) {
-    const loginUrl = new URL('/login', req.url);
-    loginUrl.searchParams.set('from', req.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+    const redirectUrl = new URL('/login', req.url);
+    return NextResponse.redirect(redirectUrl);
   }
 
-  // Handle public routes (login, register) when user is already authenticated
+  // Handle public routes when authenticated
   if (isPublicRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL('/admin', req.url));
+    const redirectUrl = new URL('/dashboard', req.url);
+    return NextResponse.redirect(redirectUrl);
   }
 
-  // Continue with added security headers
+  // For all other routes, just add security headers
   return NextResponse.next({
     headers: headers,
   });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useFormState } from 'react-dom';
 import { createRole, updateRole } from '../dashboard/settings/actions';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -32,15 +32,15 @@ interface RoleFormProps {
 }
 
 export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
-  const [state, formAction] = useActionState<RoleState, FormData>(
+  const [state, formAction] = useFormState<RoleState, FormData>(
     role ? updateRole : createRole,
-    {}
+    { errors: {}, success: false }
   );
   const router = useRouter();
 
   useEffect(() => {
     if (state?.success) {
-      router.push('/dashboard');
+      router.push('/dashboard/settings');
       router.refresh();
       onSuccess?.();
     }

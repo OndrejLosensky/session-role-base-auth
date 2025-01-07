@@ -17,9 +17,9 @@ export const featureFlagDescriptions: Record<DashboardFeatureFlag, string> = {
 // Feature flag configuration
 export const featureFlags = {
   [DashboardFeatureFlag.ADMIN_NAVBAR]: true,
-  [DashboardFeatureFlag.USER_MENU]: false,
+  [DashboardFeatureFlag.USER_MENU]: true,
   [DashboardFeatureFlag.PROFILE]: false,
-  [DashboardFeatureFlag.SETTINGS]: false,
+  [DashboardFeatureFlag.SETTINGS]: true,
 } as const;
 
 export type FeatureFlagsConfig = typeof featureFlags;

@@ -15,7 +15,7 @@ interface EditPermissionPageProps {
 export default async function EditPermissionPage({ params }: EditPermissionPageProps) {
   const { id } = await params;
   const user = await getUser();
-  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_PERMISSIONS);
+  const canManagePermissions = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 
   if (!canManagePermissions) {
     redirect("/unauthorized");

@@ -44,7 +44,7 @@ export async function updateUserProfile(
   formData: FormData
 ): Promise<ProfileUpdateState> {
   const user = await getUser();
-  const canEditProfile = await hasPermission(user.id, Permission.EDIT_OWN_PROFILE);
+  const canEditProfile = await hasPermission(user.id, Permission.VIEW_PROFILE);
 
   if (!canEditProfile) {
     return {
