@@ -24,7 +24,7 @@ export default async function SettingsPage() {
             <h1 className="text-2xl font-bold mb-6">Settings</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {links.map(link => (
-                    <Link key={link.href} href={link.href} className="block p-4 border rounded-lg shadow hover:bg-gray-100 transition">
+                    <Link key={link.href} href={link.href} className="block p-4 border rounded-lg shadow-sm hover:bg-gray-100 transition">
                         <h2 className="text-lg font-semibold">{link.title}</h2>
                         <p className="text-gray-600">{link.description}</p>
                     </Link>

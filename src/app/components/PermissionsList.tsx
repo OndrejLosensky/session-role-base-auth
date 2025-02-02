@@ -54,7 +54,7 @@ export function PermissionsList({
         {canManagePermissions && (
           <Link
             href="/dashboard/settings/permissions/add"
-            className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500"
+            className="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-green-500"
           >
             Add New Permission
           </Link>

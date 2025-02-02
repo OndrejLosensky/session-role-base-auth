@@ -52,7 +52,7 @@ export function UsersList({ users, roles, currentUserId, canCreateUser, usersCou
         {canCreateUser && (
           <Link
             href  ="/dashboard/settings/users/add-user"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500"
           >
             Add New User
           </Link>

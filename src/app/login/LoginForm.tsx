@@ -17,7 +17,7 @@ export function LoginForm() {
           id="email"
           name="email"
           required
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         {state?.errors?.email && (
           <p className="text-sm text-red-500">{state.errors.email[0]}</p>
@@ -33,7 +33,7 @@ export function LoginForm() {
           id="password"
           name="password"
           required
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         {state?.errors?.password && (
           <p className="text-sm text-red-500">{state.errors.password[0]}</p>
@@ -42,7 +42,7 @@ export function LoginForm() {
 
       <button
         type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
         Sign In
       </button>

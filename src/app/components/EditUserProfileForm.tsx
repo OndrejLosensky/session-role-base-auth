@@ -24,7 +24,7 @@ export function EditUserProfileForm({ user }: EditUserProfileFormProps) {
           id="name"
           name="name"
           defaultValue={user.name || ''}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.name && (
           <p className="mt-1 text-sm text-red-600">{state.errors.name[0]}</p>
@@ -40,7 +40,7 @@ export function EditUserProfileForm({ user }: EditUserProfileFormProps) {
           id="email"
           name="email"
           defaultValue={user.email}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.email && (
           <p className="mt-1 text-sm text-red-600">{state.errors.email[0]}</p>
@@ -55,7 +55,7 @@ export function EditUserProfileForm({ user }: EditUserProfileFormProps) {
           type="password"
           id="currentPassword"
           name="currentPassword"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.currentPassword && (
           <p className="mt-1 text-sm text-red-600">{state.errors.currentPassword[0]}</p>
@@ -70,7 +70,7 @@ export function EditUserProfileForm({ user }: EditUserProfileFormProps) {
           type="password"
           id="newPassword"
           name="newPassword"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.newPassword && (
           <p className="mt-1 text-sm text-red-600">{state.errors.newPassword[0]}</p>

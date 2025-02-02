@@ -58,7 +58,7 @@ export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
           id="name"
           name="name"
           defaultValue={role?.name || ''}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.name && (
           <p className="mt-1 text-sm text-red-600">{state.errors.name[0]}</p>
@@ -74,7 +74,7 @@ export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
           name="description"
           defaultValue={role?.description || ''}
           rows={3}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.description && (
           <p className="mt-1 text-sm text-red-600">{state.errors.description[0]}</p>
@@ -93,7 +93,7 @@ export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
                 name="permissions"
                 value={permission.name}
                 defaultChecked={role?.permissions.some(p => p.name === permission.name)}
-                className="rounded border-gray-300"
+                className="rounded-sm border-gray-300"
               />
               <span className="text-sm">
                 {permission.name.toLowerCase().replace(/_/g, ' ')}

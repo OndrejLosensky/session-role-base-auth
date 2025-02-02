@@ -55,7 +55,7 @@ export function PermissionForm({ permission }: PermissionFormProps) {
           name="name"
           placeholder="read_posts"
           defaultValue={permission?.name || ''}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.name && (
           <p className="mt-1 text-sm text-red-600">{state.errors.name[0]}</p>
@@ -72,7 +72,7 @@ export function PermissionForm({ permission }: PermissionFormProps) {
           placeholder="Permission to read posts"
           defaultValue={permission?.description || ''}
           rows={3}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state?.errors?.description && (
           <p className="mt-1 text-sm text-red-600">{state.errors.description[0]}</p>

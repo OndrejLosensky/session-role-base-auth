@@ -42,7 +42,7 @@ export function AdminNavbar({
     }`;
 
   return (
-    <nav className="sticky top-0 bg-white shadow-sm px-4 py-2 w-screen">
+    <nav className="sticky top-0 bg-white shadow-xs px-4 py-2 w-screen">
       <div className="flex items-center justify-between flex-row">
         <div className="flex items-center space-x-1">
           <Link href="/dashboard" className={linkClass("/dashboard")}>

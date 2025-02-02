@@ -45,7 +45,7 @@ export function AddNewUserForm() {
           type="email"
           id="email"
           name="email"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state.errors?.email && (
           <p className="mt-1 text-sm text-red-600">{state.errors.email}</p>
@@ -60,7 +60,7 @@ export function AddNewUserForm() {
           type="text"
           id="name"
           name="name"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state.errors?.name && (
           <p className="mt-1 text-sm text-red-600">{state.errors.name}</p>
@@ -75,7 +75,7 @@ export function AddNewUserForm() {
           type="password"
           id="password"
           name="password"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         />
         {state.errors?.password && (
           <p className="mt-1 text-sm text-red-600">{state.errors.password}</p>
@@ -89,7 +89,7 @@ export function AddNewUserForm() {
         <select
           id="roleId"
           name="roleId"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
         >
           <option value="user">User</option>
           <option value="admin">Bartender</option>
