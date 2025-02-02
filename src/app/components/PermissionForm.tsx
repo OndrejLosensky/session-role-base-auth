@@ -1,9 +1,8 @@
 "use client";
 
-import { useFormState } from "react-dom";
 import { createPermission, updatePermission } from "@/app/dashboard/settings/permissions/actions";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useTransition, useActionState } from "react";
 
 type PermissionState = {
   errors?: {
@@ -25,7 +24,7 @@ interface PermissionFormProps {
 export function PermissionForm({ permission }: PermissionFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [state, formAction] = useFormState<PermissionState, FormData>(
+  const [state, formAction] = useActionState<PermissionState, FormData>(
     permission ? updatePermission : createPermission,
     {
       errors: undefined,

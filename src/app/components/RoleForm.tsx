@@ -1,9 +1,8 @@
 'use client';
 
-import { useFormState } from 'react-dom';
 import { createRole, updateRole } from '../dashboard/settings/actions';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useActionState } from 'react';
 
 type RoleState = {
   errors?: {
@@ -32,7 +31,7 @@ interface RoleFormProps {
 }
 
 export function RoleForm({ role, permissions, onSuccess }: RoleFormProps) {
-  const [state, formAction] = useFormState<RoleState, FormData>(
+  const [state, formAction] = useActionState<RoleState, FormData>(
     role ? updateRole : createRole,
     { errors: {}, success: false }
   );

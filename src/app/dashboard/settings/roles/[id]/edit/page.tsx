@@ -7,12 +7,13 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 interface EditRolePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function EditRolePage({ params }: EditRolePageProps) {
+export default async function EditRolePage(props: EditRolePageProps) {
+  const params = await props.params;
   const user = await getUser();
   const canManageRoles = await hasPermission(user.id, Permission.MANAGE_SETTINGS);
 

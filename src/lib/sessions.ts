@@ -34,7 +34,7 @@ export async function decrypt(input: string): Promise<SessionData | null> {
 
 export async function createSession(userId: string) {
   const session = await encrypt({ userId, email: "", role: "" });
-  cookies().set("session", session, {
+  (await cookies()).set("session", session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -43,13 +43,13 @@ export async function createSession(userId: string) {
 }
 
 export async function deleteSession() {
-  cookies().delete("session");
+  (await cookies()).delete("session");
 }
 
 // Get session data from cookie
 export async function getSession(): Promise<SessionData | null> {
   try {
-    const session = cookies().get("session");
+    const session = (await cookies()).get("session");
     
     if (!session) {
       return null;

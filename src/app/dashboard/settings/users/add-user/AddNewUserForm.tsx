@@ -1,9 +1,9 @@
 "use client";
 
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { createUser } from "./actions";
 import { generateGradient } from "@/app/utils/generateGradient";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useActionState } from "react";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -20,7 +20,7 @@ function SubmitButton() {
 }
 
 export function AddNewUserForm() {
-  const [state, formAction] = useFormState(createUser, {
+  const [state, formAction] = useActionState(createUser, {
     errors: {},
     success: false,
   });

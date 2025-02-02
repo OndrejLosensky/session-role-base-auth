@@ -1,6 +1,6 @@
+import { useActionState } from "react";
 'use client'
 
-import { useFormState } from 'react-dom'
 import { updateUserProfile } from '@/app/dashboard/profile/profile'
 import { User } from '@/app/utils/types'
 
@@ -8,7 +8,7 @@ interface EditUserProfileFormProps {
   user: User
 }
 export function EditUserProfileForm({ user }: EditUserProfileFormProps) {
-  const [state, formAction] = useFormState(updateUserProfile, {
+  const [state, formAction] = useActionState(updateUserProfile, {
     errors: undefined,
     success: false,
   })

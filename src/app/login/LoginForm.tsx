@@ -1,10 +1,10 @@
+import { useActionState } from "react";
 "use client";
 
-import { useFormState } from "react-dom";
 import { login } from "./actions";
 
 export function LoginForm() {
-  const [state, formAction] = useFormState(login, undefined);
+  const [state, formAction] = useActionState(login, undefined);
 
   return (
     <form action={formAction} className="flex flex-col gap-4 min-w-[350px] bg-white p-6 rounded-lg shadow-md">
